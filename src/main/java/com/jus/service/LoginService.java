@@ -11,7 +11,9 @@ import java.util.Map;
  */
 public interface LoginService {
 
-    List<Map<String,Object>> getTeacherInfo();
+    List<Map<String,Object>> getTeacherInfo(Map<String,Object> params);
 
-    List<Map<String,Object>> getStudentInfo();
+    int updateTeacherInfo(Map<String, Object> params);
+
+    List<Map<String,Object>> getStudentInfo(Map<String,Object> params);
 }

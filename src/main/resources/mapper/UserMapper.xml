@@ -7,7 +7,7 @@
         <id property="id" column="id"></id>
         <result property="name" column="name"></result>
         <result property="t_id" column="t_id"></result>
-        <result property="t_pwd" column="t_pwd"></result>
+        <result property="password" column="t_pwd"></result>
         <result property="e_mail" column="e_mail"></result>
         <result property="ext_1" column="ext_1"></result>
         <result property="ext_2" column="ext_2"></result>
@@ -18,8 +18,8 @@
     <resultMap id="studentResultMap" type="java.util.Map">
         <id property="id" column="id"></id>
         <result property="name" column="name"></result>
-        <result property="s_id" column="t_id"></result>
-        <result property="s_pwd" column="t_pwd"></result>
+        <result property="s_id" column="s_id"></result>
+        <result property="password" column="s_pwd"></result>
         <result property="e_mail" column="e_mail"></result>
         <result property="t_id" column="t_id"></result>
         <result property="ext_1" column="ext_1"></result>
@@ -28,8 +28,17 @@
         <result property="ext_4" column="ext_4"></result>
         <result property="ext_5" column="ext_5"></result>
     </resultMap>
+    <sql id="teacher_column">
+        id
+        ,name,t_id,t_pwd,e_mail,ext_1,ext_2,ext_3,ext_4,ext_5
+    </sql>
+    <sql id="student_column">
+        id
+        ,name,a_id,a_pwd,e_mail,t_id,ext_1,ext_2,ext_3,ext_4,ext_5
+    </sql>
     <select id="getTeacherInfo" resultMap="teacherResultMap" parameterType="java.util.Map">
-        select *
+        select
+        <include refid="teacher_column"></include>
         from teacher_info
         where 1 = 1
         <if test="id != '' and id != null">
@@ -42,6 +51,43 @@
             and e_mail = #{e_mail}
         </if>
     </select>
+
+    <update id="updateTeacherInfo" parameterType="java.util.Map">
+        update teacher_info
+        SET
+        <if test="ext_5 != null and ext_5 !=''">
+            ext_5 = #{ext_5}
+        </if>
+        <if test="ext_4 != null and ext_4 !=''">
+            ext_4 = #{ext_4}
+        </if>
+        <if test="ext_3 != null and ext_3 !=''">
+            ext_3 = #{ext_3}
+        </if>
+        <if test="ext_2 != null and ext_2 !=''">
+            ext_2 = #{ext_2}
+        </if>
+        <if test="ext_1 != null and ext_1 !=''">
+            ext_1 = #{ext_1}
+        </if>
+        <if test="e_mail != null and e_mail !=''">
+            e_mail = #{e_mail}
+        </if>
+        <if test="name != null and name !=''">
+            name = #{name}
+        </if>
+        <if test="t_pwd != null and t_pwd !=''">
+            t_pwd = #{t_pwd}
+        </if>
+        WHERE 1 = 1
+        <if test="id != null and id !=''">
+            and id = #{id}
+        </if>
+        <if test="t_id != null and t_id !=''">
+            and t_id = #{t_id}
+        </if>
+
+    </update>
 
     <select id="getStudentInfo">
 

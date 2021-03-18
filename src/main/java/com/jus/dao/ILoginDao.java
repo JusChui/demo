@@ -1,6 +1,7 @@
 package com.jus.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,17 @@ import java.util.Map;
 @Mapper
 public interface ILoginDao {
 
-    List<Map<String,Object>> getTeacherInfo();
+    /* 教师信息操作 */
 
-    List<Map<String,Object>> getStudentInfo();
+    /**
+     * 查询教师信息
+     *
+     * @param params
+     * @return
+     */
+    List<Map<String, Object>> getTeacherInfo(Map<String, Object> params);
+
+    int updateTeacherInfo(Map<String, Object> params);
+
+    List<Map<String, Object>> getStudentInfo(Map<String, Object> params);
 }

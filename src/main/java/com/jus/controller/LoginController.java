@@ -2,14 +2,17 @@ package com.jus.controller;
 
 import com.jus.service.impl.LoginServiceImpl;
 import com.jus.util.result.JsonResult;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,9 +23,12 @@ import java.util.Map;
  * @createTime: 2021/3/16 16:43
  */
 @RestController
+@Slf4j
 public class LoginController {
 
     private LoginServiceImpl loginService;
+
+    private Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     public LoginController(LoginServiceImpl loginService) {
@@ -30,13 +36,43 @@ public class LoginController {
     }
 
     @RequestMapping(path = "/login", method = {RequestMethod.POST})
-    public JsonResult teacherLogin(@RequestParam Map<String, Object> params) {
-        params.forEach((s, o) -> System.out.println(s + ":" + o));
-        List<Map<String, Object>> list = loginService.getTeacherInfo();
+    // @Transactional
+    public JsonResult teacherLogin(@RequestBody Map<String, Object> params) {
+        logger.info("LoginController_teacherLogin-->入参" + params);
         JsonResult jsonResult = new JsonResult();
-        jsonResult.setReturnCode("200");
-        jsonResult.setReturnMessage("SUCCESS");
-        jsonResult.setBeans(list);
+        try {
+            String password = (String) params.get("password");
+            List<Map<String, Object>> list = loginService.getTeacherInfo(params);
+            logger.info("LoginController_teacherLogin-->查询用户：" + list);
+            if (CollectionUtils.isEmpty(list)) {
+                jsonResult.setReturnCode("412");
+                jsonResult.setReturnMessage("用户不存在");
+            } else if (list.size() == 1) {
+                if (StringUtils.equals((String) list.get(0).get("password"), password)) {
+                    // 账号密码匹配成功
+                    jsonResult.setReturnCode("200");
+                    jsonResult.setReturnMessage("登录成功");
+                    list.get(0).remove("password");
+                    jsonResult.setBean(list.get(0));
+                    Map<String, Object> p = new HashMap<>();
+                    p.put("id", "001");
+                    p.put("ext_1", "login");
+                    loginService.updateTeacherInfo(p);
+                } else {
+                    jsonResult.setReturnCode("412");
+                    jsonResult.setReturnMessage("账号密码不匹配");
+                }
+            } else {
+                jsonResult.setReturnCode("400");
+                jsonResult.setReturnMessage("用户异常");
+                logger.warn("查询到多条数据");
+            }
+        } catch (Exception e) {
+            jsonResult.setReturnCode("503");
+            jsonResult.setReturnMessage("系统异常");
+            logger.error(e.getMessage() == null ? e.toString() : e.getMessage());
+        }
+        logger.info("LoginController_teacherLogin-->返回报文：" + jsonResult);
         return jsonResult;
     }
 }
