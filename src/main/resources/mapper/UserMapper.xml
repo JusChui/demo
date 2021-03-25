@@ -4,16 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jus.dao.ILoginDao">
     <resultMap id="teacherResultMap" type="java.util.Map">
-        <id property="id" column="id"></id>
-        <result property="name" column="name"></result>
-        <result property="t_id" column="t_id"></result>
-        <result property="password" column="t_pwd"></result>
-        <result property="e_mail" column="e_mail"></result>
-        <result property="ext_1" column="ext_1"></result>
-        <result property="ext_2" column="ext_2"></result>
-        <result property="ext_3" column="ext_3"></result>
-        <result property="ext_4" column="ext_4"></result>
-        <result property="ext_5" column="ext_5"></result>
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="t_id" column="t_id"/>
+        <result property="password" column="t_pwd"/>
+        <result property="e_mail" column="e_mail"/>
+        <result property="ext_1" column="ext_1"/>
+        <result property="ext_2" column="ext_2"/>
+        <result property="ext_3" column="ext_3"/>
+        <result property="ext_4" column="ext_4"/>
+        <result property="ext_5" column="ext_5"/>
     </resultMap>
     <resultMap id="studentResultMap" type="java.util.Map">
         <id property="id" column="id"></id>
@@ -34,8 +34,9 @@
     </sql>
     <sql id="student_column">
         id
-        ,name,a_id,a_pwd,e_mail,t_id,ext_1,ext_2,ext_3,ext_4,ext_5
+        ,name,s_id,s_pwd,e_mail,t_id,ext_1,ext_2,ext_3,ext_4,ext_5
     </sql>
+    <!--    查询教师信息    -->
     <select id="getTeacherInfo" resultMap="teacherResultMap" parameterType="java.util.Map">
         select
         <include refid="teacher_column"></include>
@@ -51,7 +52,7 @@
             and e_mail = #{e_mail}
         </if>
     </select>
-
+    <!--更新教师信息-->
     <update id="updateTeacherInfo" parameterType="java.util.Map">
         update teacher_info
         SET
@@ -86,10 +87,64 @@
         <if test="t_id != null and t_id !=''">
             and t_id = #{t_id}
         </if>
-
     </update>
 
-    <select id="getStudentInfo">
-
+    <!--查询学生信息-->
+    <select id="getStudentInfo" resultMap="studentResultMap" parameterType="java.util.Map">
+        select
+        <include refid="student_column"></include>
+        from student_info
+        where 1 = 1
+        <if test="id != '' and id != null">
+            and id = #{id}
+        </if>
+        <if test="t_id != '' and t_id != null">
+            and t_id = #{t_id}
+        </if>
+        <if test="e_mail != '' and e_mail != null">
+            and e_mail = #{e_mail}
+        </if>
+        <if test="s_id != '' and s_id != null">
+            and s_id = #{s_id}
+        </if>
     </select>
+    <!--更新学生信息-->
+    <update id="updateStudentInfo" parameterType="java.util.Map">
+        update student_info
+        SET
+        <if test="ext_5 != null and ext_5 !=''">
+            ext_5 = #{ext_5}
+        </if>
+        <if test="ext_4 != null and ext_4 !=''">
+            ext_4 = #{ext_4}
+        </if>
+        <if test="ext_3 != null and ext_3 !=''">
+            ext_3 = #{ext_3}
+        </if>
+        <if test="ext_2 != null and ext_2 !=''">
+            ext_2 = #{ext_2}
+        </if>
+        <if test="ext_1 != null and ext_1 !=''">
+            ext_1 = #{ext_1}
+        </if>
+        <if test="e_mail != null and e_mail !=''">
+            e_mail = #{e_mail}
+        </if>
+        <if test="name != null and name !=''">
+            name = #{name}
+        </if>
+        <if test="t_pwd != null and t_pwd !=''">
+            s_pwd = #{s_pwd}
+        </if>
+        <if test="t_id != null and t_id != ''">
+            t_id = #{t_id}
+        </if>
+        WHERE 1 = 1
+        <if test="id != null and id !=''">
+            and id = #{id}
+        </if>
+        <if test="s_id != null and s_id !=''">
+            and s_id = #{s_id}
+        </if>
+    </update>
 </mapper>

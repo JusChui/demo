@@ -25,7 +25,30 @@ public interface ILoginDao {
      */
     List<Map<String, Object>> getTeacherInfo(Map<String, Object> params);
 
+    /**
+     * 更新教师信息
+     *
+     * @param params
+     * @return
+     */
     int updateTeacherInfo(Map<String, Object> params);
 
+    /* 学生信息操作 */
+
+    /**
+     * 查询学生信息
+     *
+     * @param params
+     * @return
+     */
     List<Map<String, Object>> getStudentInfo(Map<String, Object> params);
+
+
+    /**
+     * 更新学生信息
+     *
+     * @param params
+     * @return
+     */
+    int updateStudentInfo(Map<String, Object> params);
 }

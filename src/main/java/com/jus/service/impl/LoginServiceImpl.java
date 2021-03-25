@@ -25,7 +25,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public List<Map<String, Object>> getTeacherInfo(Map<String,Object> params) {
+    public List<Map<String, Object>> getTeacherInfo(Map<String, Object> params) {
         return loginDao.getTeacherInfo(params);
     }
 
@@ -35,7 +35,12 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public List<Map<String, Object>> getStudentInfo(Map<String,Object> params) {
+    public List<Map<String, Object>> getStudentInfo(Map<String, Object> params) {
         return loginDao.getStudentInfo(params);
+    }
+
+    @Override
+    public int updateStudentInfo(Map<String, Object> params) {
+        return loginDao.updateStudentInfo(params);
     }
 }
