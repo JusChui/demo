@@ -1,4 +1,4 @@
-package com.jus.util.result;
+package com.jus.domain;
 
 import lombok.Data;
 
